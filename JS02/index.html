@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <h1>Rock Paper Scissors</h1>
+  <section>
+    <button id="start-button" onclick="gameStart()">Start</button>
+    <div id="countdown">3</div>
+  </section>
+  
+  <section id="playerBoard">
+    <h2>You choose...</h2>
+    <button id="rock-button" onclick="chooseRock()">Rock</button>
+    <button id="paper-button" onclick="choosePaper()">Paper</button>
+    <button id="scissors-button" onclick="chooseScissors()">Scissors</button>
+    <div id="player-result">you: </div>
+  </section>
+
+  <section id="computerBoard">
+    <h2>Computer choose...</h2>
+    <div id="computer-result">computer: </div>
+  </section>
+
+  <section id="resultBoard">
+    <h2>Winner is...</h2>
+    <p id="resultPara"></p>
+  </section>
+
+  <form>
+    <button id="resetButton" type="submit">Play Again?</button>
+  </form>
+  <script src="./rockPaperScissors.js"></script>
+</body>
+</html>

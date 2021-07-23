@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <script>
+    function fetchAndDecode(url, type) {
+      let response = await fetch(url)
+
+      let content;
+
+      if (!response.ok) {
+        throw new Error(`error! ${response.status}`)
+      } else {
+        if (type === 'blob') {
+            content = await response.blob()
+          } else if (type === 'text') {
+            content = await response.text()
+          }
+      }
+
+      return content;
+    }
+
+    const displayContent = async () => {
+      let coffee = fetchAndDecode('coffee.jpeg', 'blob')
+    let tea = fetchAndDecode('tea.jpeg', 'blob')
+    let description = fetchAndDecode('description.txt', 'text')
+
+      let values = await Promise.all([coffe, tea, description])
+
+      console.log(values)
+
+      let objectURL1 = URL.createObjectURL(values[0])
+      let objectURL2 = URL.createObjectURL(values[1])
+      let descText = values[2]
+
+      let image1 = document.createElement('img')
+      let image2 = document.createElement('img')
+      image1.src = objectURL1
+      image2.src = objectURL2
+      document.body.appendChild(image1)
+      document.body.appendChild(image2)
+
+      let para = document.createElement('p')
+      para.textContent = descText
+      document.body.appendChild(para)
+    }
+
+    displayContent();
+    
+  </script>
+</body>
+</html>
