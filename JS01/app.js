@@ -30,16 +30,16 @@ let imgElement = document.createElement("img");
 let paragraph = document.createElement("p");
 
 const setIndex = new Promise((resolve, reject) => {
-  const randomNum = Math.floor(Math.random() * courseArr.length) % 4;
+  const randomNum = Math.floor(Math.random() * courseArr.length);
   setTimeout(() => resolve(randomNum, 2000));
 });
 
 const fetchData = async (result) => {
+  paragraph.textContent = courseArr[result].title;
+  document.body.appendChild(paragraph);
   const response = await fetch(courseArr[result].image_url);
   imgElement.src = response.url;
-  paragraph.textContent = courseArr[result].title;
   document.body.appendChild(imgElement);
-  document.body.appendChild(paragraph);
 };
 
 const printCourse = () => setIndex.then(fetchData);
