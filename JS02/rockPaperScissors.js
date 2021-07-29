@@ -116,6 +116,7 @@ const displayResult = ([playerWin, computerWin]) => {
 };
 */
 
+const startButton = document.getElementById("start-button");
 const selectionButtons = document.querySelectorAll("[data-selection]");
 const startgameSection = document.querySelector(".start-game");
 const computerScoreSpan = document.querySelector("[data-computer-score");
@@ -137,6 +138,29 @@ const SELECTIONS = [
     beats: "paper",
   },
 ];
+
+const gameStart = () => {
+  let count = 3;
+  const interval = setInterval(() => {
+    if (count === 0) {
+      clearInterval(interval);
+      return;
+    }
+    count--;
+    showCountdown.innerHTML = count;
+  }, 1000);
+
+  const p = new Promise((resolve) => {
+    const computer = rpsArray[Math.floor(Math.random() * 3)];
+    computerResult.innerHTML += computer;
+    const playerTimeout = setTimeout(() => {
+      setPlayer();
+      resolve([player, computer]);
+    }, 3200);
+  });
+
+  p.then((result) => setGame(result)).then((result) => displayResult(result));
+};
 
 selectionButtons.forEach((selectionButton) => {
   const selectButton = () => {
