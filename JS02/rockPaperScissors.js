@@ -119,10 +119,17 @@ const displayResult = ([playerWin, computerWin]) => {
 const startButton = document.getElementById("start-button");
 const selectionButtons = document.querySelectorAll("[data-selection]");
 const startgameSection = document.querySelector(".start-game");
-const computerScoreSpan = document.querySelector("[data-computer-score");
-const yourScoreSpan = document.querySelector("[data-your-score]");
-const finalColoumn = document.querySelector("[data-final-column]");
+//const computerScoreSpan = document.querySelector("[data-computer-score");
+//const yourScoreSpan = document.querySelector("[data-your-score]");
+const gameCountSpan = document.querySelector(".game-count");
+const timeCountSpan = document.querySelector(".time-count");
+const playerResultSpan = document.querySelector(".player-result");
+const computerResultSpan = document.querySelector(".computer-result");
+
 let gameCount = 0;
+let playerScroe = 0;
+let compuerScore = 0;
+let playerResult, computerResult;
 
 const SELECTIONS = [
   {
@@ -139,27 +146,22 @@ const SELECTIONS = [
   },
 ];
 
-const gameStart = () => {
+const timeCountdown = () => {
   let count = 3;
   const interval = setInterval(() => {
+    timeCountSpan.innerText = count;
     if (count === 0) {
+      randomSelection();
+      showResult();
       clearInterval(interval);
       return;
     }
     count--;
-    showCountdown.innerHTML = count;
   }, 1000);
+};
 
-  const p = new Promise((resolve) => {
-    const computer = rpsArray[Math.floor(Math.random() * 3)];
-    computerResult.innerHTML += computer;
-    const playerTimeout = setTimeout(() => {
-      setPlayer();
-      resolve([player, computer]);
-    }, 3200);
-  });
-
-  p.then((result) => setGame(result)).then((result) => displayResult(result));
+const showResult = () => {
+  computerResultSpan.innerText = computerResult;
 };
 
 selectionButtons.forEach((selectionButton) => {
@@ -168,7 +170,29 @@ selectionButtons.forEach((selectionButton) => {
     const selected = SELECTIONS.find(
       (selection) => selection.name === selectedName
     );
-    makeSelection(selected);
+    playerResult = selected.name;
+    playerResultSpan.innerText = playerResult;
+  };
+  selectionButton.addEventListener("click", selectButton);
+});
+
+const startGame = () => {
+  gameCount++;
+  gameCountSpan.innerText = gameCount;
+
+  timeCountdown();
+
+  //p.then((result) => setGame(result)).then((result) => displayResult(result));
+};
+
+selectionButtons.forEach((selectionButton) => {
+  const selectButton = () => {
+    const selectedName = selectionButton.dataset.selection;
+    const selected = SELECTIONS.find(
+      (selection) => selection.name === selectedName
+    );
+    playerResult = selected.name;
+    playerResultSpan.innerText = playerResult;
   };
   selectionButton.addEventListener("click", selectButton);
 });
@@ -222,17 +246,7 @@ const makeSelection = (selected) => {
   }
 };
 
-const addSelectionResult = (selection, winner) => {
-  const div = document.createElement("div");
-  div.innerHTML = selection.name;
-  div.classList.add("result-selection");
-  if (winner) {
-    div.classList.add("winner");
-  }
-  finalColoumn.after(div);
-};
-
 const randomSelection = () => {
   const randomIndex = Math.floor(Math.random() * SELECTIONS.length);
-  return SELECTIONS[randomIndex];
+  computerResult = SELECTIONS[randomIndex].name;
 };
