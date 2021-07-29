@@ -125,43 +125,63 @@ const gameCountSpan = document.querySelector(".game-count");
 const timeCountSpan = document.querySelector(".time-count");
 const playerResultSpan = document.querySelector(".player-result");
 const computerResultSpan = document.querySelector(".computer-result");
+const sessionWinnerSpan = document.querySelector(".session-winner");
+const scoreSpan = document.querySelector(".session-score");
 
 let gameCount = 0;
-let playerScroe = 0;
-let compuerScore = 0;
+let playerScore = 0;
+let computerScore = 0;
 let playerResult, computerResult;
+let sessionWinner, finalWinner;
 
 const SELECTIONS = [
   {
     name: "rock",
     beats: "scissors",
+    loses: "paper",
   },
   {
     name: "paper",
     beats: "rock",
+    loses: "scissors",
   },
   {
     name: "scissors",
     beats: "paper",
+    loses: "rock",
   },
 ];
 
 const timeCountdown = () => {
   let count = 3;
-  const interval = setInterval(() => {
-    timeCountSpan.innerText = count;
-    if (count === 0) {
-      randomSelection();
-      showResult();
-      clearInterval(interval);
-      return;
-    }
-    count--;
-  }, 1000);
+  return new Promise((resolve) => {
+    const interval = setInterval(() => {
+      timeCountSpan.innerText = count;
+      if (count === 0) {
+        clearInterval(interval);
+        resolve("success");
+      }
+      count--;
+    }, 1000);
+  });
 };
 
-const showResult = () => {
+const makeSessionResult = () => {
+  randomSelection();
   computerResultSpan.innerText = computerResult;
+  const selected = SELECTIONS.find(
+    (selection) => selection.name === playerResult
+  );
+  if (computerResult === selected.beats) {
+    sessionWinnerSpan.innerText = "You won";
+    playerScore++;
+  } else if (computerResult === selected.loses) {
+    sessionWinnerSpan.innerText = "Computer won";
+    computerScore++;
+  } else {
+    sessionWinnerSpan.innerText = "Draw";
+  }
+  scoreSpan.innerText = `player: ${playerScore}, computer: ${computerScore}`;
 };
 
 selectionButtons.forEach((selectionButton) => {
@@ -180,9 +200,7 @@ const startGame = () => {
   gameCount++;
   gameCountSpan.innerText = gameCount;
 
-  timeCountdown();
-
-  //p.then((result) => setGame(result)).then((result) => displayResult(result));
+  timeCountdown().then(() => setTimeout(makeSessionResult, 200));
 };
 
 selectionButtons.forEach((selectionButton) => {
