@@ -6,6 +6,7 @@ body {
 .main-container {
   display: flex;
   flex-direction: column;
+  background-color: #f9f9f9;
   align-items: center;
 }
 
@@ -13,7 +14,8 @@ body {
   width: 80%;
   margin-top: 15px;
   margin-bottom: 15px;
-  border: 2px solid lightgray;
+  border: 1px solid lightgray;
+  background-color: #fff;
   padding: 20px;
   display: flex;
   flex-direction: column;
@@ -66,16 +68,50 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-}
-
-.session-result {
-  margin-left: 10px;
-  margin-right: 10px;
-  padding: 10px;
-  height: 40px;
+  width: 50%;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  height: 30px;
 }
 
 #session-winner, #session-score {
+  display: flex;
   margin-top: 10px;
+  width: 50%;
+  border: 1px solid lightgray;
+}
+
+.session-winner-title, .session-score-title {
+  font-weight: bold;
+  width: 80px;
+  background-color: lightgray;
+  padding: 6px;
+  text-align: center;
+}
+
+.session-winner, .session-score {
+  text-align: center;
+  padding: 6px;
+}
+
+.session-score {
+  margin-left: 4px;
+}
+
+.player-result, .computer-result {
+  flex: 50%;
+  text-align: center;
+  padding: 6px;
+  font-size: 1.2rem;
+}
+
+.final-winner, .winning-rate {
+  height: 20px;
+  margin: 4px;
+}
+
+#new-game {
+  margin-top: 20px;
+  font-size: 1rem;
   padding: 6px;
 }

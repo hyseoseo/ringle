@@ -1,6 +1,5 @@
 const startButton = document.getElementById("start-button");
 const selectionButtons = document.querySelectorAll("[data-selection]");
-const startgameSection = document.querySelector(".start-game");
 const gameCountSpan = document.querySelector(".game-count");
 const timeCountSpan = document.querySelector(".time-count");
 const playerResultSpan = document.querySelector(".player-result");
@@ -52,9 +51,42 @@ const timeCountdown = () => {
   });
 };
 
+const startGame = () => {
+  startButton.setAttribute("disabled", "");
+  if (gameCount === GAME_COUNT) {
+    makeFinalResult();
+    return;
+  }
+  gameCount++;
+  gameCountSpan.innerText = gameCount;
+
+  timeCountdown()
+    .then(() => setTimeout(makeSessionResult, 200))
+    .then(() => setTimeout(startNewSession, 2000));
+};
+
+startButton.addEventListener("click", startGame);
+
+selectionButtons.forEach((selectionButton) => {
+  const selectButton = () => {
+    const selectedName = selectionButton.dataset.selection;
+    const selected = SELECTIONS.find(
+      (selection) => selection.name === selectedName
+    );
+    playerResult = selected.name;
+    playerResultSpan.innerText = `You: ${playerResult}`;
+  };
+  selectionButton.addEventListener("click", selectButton);
+});
+
+const randomSelection = () => {
+  const randomIndex = Math.floor(Math.random() * SELECTIONS.length);
+  computerResult = SELECTIONS[randomIndex].name;
+};
+
 const makeSessionResult = () => {
   randomSelection();
-  computerResultSpan.innerText = computerResult;
+  computerResultSpan.innerText = `Computer: ${computerResult}`;
   const selected = SELECTIONS.find(
     (selection) => selection.name === playerResult
   );
@@ -80,33 +112,22 @@ const startNewSession = () => {
   startGame();
 };
 
-selectionButtons.forEach((selectionButton) => {
-  const selectButton = () => {
-    const selectedName = selectionButton.dataset.selection;
-    const selected = SELECTIONS.find(
-      (selection) => selection.name === selectedName
-    );
-    playerResult = selected.name;
-    playerResultSpan.innerText = playerResult;
-  };
-  selectionButton.addEventListener("click", selectButton);
-});
-
-const startGame = () => {
-  startButton.setAttribute("disabled", "");
-  if (gameCount === GAME_COUNT) {
-    makeFinalResult();
-    return;
+const makeFinalResult = () => {
+  let winningRate = 0;
+  if (playerScore > computerScore) {
+    finalWinner = "You";
+    winningRate = playerScore / GAME_COUNT;
+  } else if (playerScore < computerScore) {
+    finalWinner = "Computer";
+    winningRate = computerScore / GAME_COUNT;
+  } else {
+    finalWinner = "No one";
+    winningRate = 0;
   }
-  gameCount++;
-  gameCountSpan.innerText = gameCount;
-
-  timeCountdown()
-    .then(() => setTimeout(makeSessionResult, 200))
-    .then(() => setTimeout(startNewSession, 2000));
+  finalWinnerSpan.innerText = `Final Winner is ${finalWinner}.`;
+  winningRateSpan.innerText = `Final Winning Rate is ${winningRate}.`;
+  newGameButton.removeAttribute("disabled", "");
 };
-
-startButton.addEventListener("click", startGame);
 
 const startNewGame = () => {
   gameCount = 0;
@@ -123,34 +144,3 @@ const startNewGame = () => {
 };
 
 newGameButton.addEventListener("click", startNewGame);
-
-const makeFinalResult = () => {
-  let winningRate = 0;
-  if (playerScore > computerScore) {
-    finalWinner = "You";
-    winningRate = playerScore / GAME_COUNT;
-  } else if (playerScore < computerScore) {
-    finalWinner = "Computer";
-    winningRate = computerScore / GAME_COUNT;
-  } else {
-    finalWinner = "No one";
-    winningRate = 0;
-  }
-  finalWinnerSpan.innerText = finalWinner;
-  winningRateSpan.innerText = winningRate;
-  newGameButton.removeAttribute("disabled", "");
-};
-
-const showWinningRate = (scoreSpan) => {
-  const winNum = parseInt(scoreSpan.innerText);
-  const winRate = winNum / 3;
-  const div = document.createElement("div");
-  div.innerHTML = `you won ${winNum} times. Winning rate is ${winRate}`;
-  addResetButton(div);
-  startgameSection.appendChild(div);
-};
-
-const randomSelection = () => {
-  const randomIndex = Math.floor(Math.random() * SELECTIONS.length);
-  computerResult = SELECTIONS[randomIndex].name;
-};
