@@ -7,32 +7,36 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <h1>Rock Paper Scissors</h1>
-  <section class="start-game">
-    <button id="start-button">Start Game</button>
-    <div>Game<span class="game-count"></span></div>
-    <div>Countdown: <span class="time-count"></span></div>
-  </section>
-  
-  <section class="selections">
-    <button class="selection" data-selection="rock">Rock</button>
-    <button class="selection" data-selection="paper">Paper</button>
-    <button class="selection" data-selection="scissors">Scissors</button>
+  <div class="main-container">
+    <h1>Rock Paper Scissors</h1>
+    <section class="start-game">
+      <button id="start-button">Start Game</button>
+      <div id="game-count">Game no.<span class="game-count"></span></div>
+      <div id="time-count">Remaining <span class="time-count">n</span> sec...</div>
+    </section>
     
-  </section>
+    <section class="selections">
+      <button class="selection" data-selection="✊">✊</button>
+      <button class="selection" data-selection="✋">✋</button>
+      <button class="selection" data-selection="✌">✌</button>
+      
+    </section>
 
-  <section class="result">
-    <div>You: <span class="player-result"></span></div>
-    <div>Computer: <span class="computer-result"></span></div>
-    <div>Result: <span class="session-winner"></span></div> 
-    <div>Score: <span class="session-score"></span></div>   
-  </section>
+    <section class="result">
+      <div class="session-results">
+        <div class="session-result">You: <span class="player-result"></span></div>
+        <div class="session-result">Computer: <span class="computer-result"></span></div>
+      </div>
+      <div id="session-winner">Result: <span class="session-winner"></span></div> 
+      <div id="session-score">Score: <span class="session-score"></span></div>   
+    </section>
 
-  <section class="final-result">
-    <div>Final Winner is <span class="final-winner"></span></div>
-    <div>Final Winning Rate: <span class="winning-rate"></span></div>
-    <button id="new-game">Start New Game</button>
-  </section>
+    <section class="final-result">
+      <div>Final Winner is... <span class="final-winner"></span></div>
+      <div>Final Winning Rate: <span class="winning-rate"></span></div>
+      <button id="new-game" disabled>Start New Game</button>
+    </section>
+  </div>
   
   <script src="./rockPaperScissors.js"></script>
 </body>

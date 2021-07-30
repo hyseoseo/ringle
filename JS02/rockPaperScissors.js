@@ -22,19 +22,19 @@ let sessionWinner, finalWinner;
 
 const SELECTIONS = [
   {
-    name: "rock",
-    beats: "scissors",
-    loses: "paper",
+    name: "✊",
+    beats: "✌",
+    loses: "✋",
   },
   {
-    name: "paper",
-    beats: "rock",
-    loses: "scissors",
+    name: "✋",
+    beats: "✊",
+    loses: "✌",
   },
   {
-    name: "scissors",
-    beats: "paper",
-    loses: "rock",
+    name: "✌",
+    beats: "✋",
+    loses: "✊",
   },
 ];
 
@@ -93,7 +93,7 @@ selectionButtons.forEach((selectionButton) => {
 });
 
 const startGame = () => {
-  startButton.removeEventListener("click", startGame);
+  startButton.setAttribute("disabled", "");
   if (gameCount === GAME_COUNT) {
     makeFinalResult();
     return;
@@ -116,9 +116,13 @@ const startNewGame = () => {
   scoreSpan.innerText = "";
   finalWinnerSpan.innerText = "";
   winningRateSpan.innerText = "";
-  startButton.addEventListener("click", startGame);
-  newGameButton.removeEventListener("click", startNewGame);
+  startButton.removeAttribute("disabled", "");
+  newGameButton.setAttribute("disabled", "");
+  gameCountSpan.innerText = "";
+  timeCountSpan.innerText = "n";
 };
+
+newGameButton.addEventListener("click", startNewGame);
 
 const makeFinalResult = () => {
   let winningRate = 0;
@@ -134,30 +138,8 @@ const makeFinalResult = () => {
   }
   finalWinnerSpan.innerText = finalWinner;
   winningRateSpan.innerText = winningRate;
-  newGameButton.addEventListener("click", startNewGame);
+  newGameButton.removeAttribute("disabled", "");
 };
-
-/*
-body.addEventListener("click", (event) => {
-  if (event.target === startButton) {
-    startGame();
-  } else if (event.target === newGameButton) {
-    startNewGame();
-  } else if (event.target === selectionButtons) {
-    selectionButtons.forEach((selectionButton) => {
-      const selectButton = () => {
-        const selectedName = selectionButton.dataset.selection;
-        const selected = SELECTIONS.find(
-          (selection) => selection.name === selectedName
-        );
-        playerResult = selected.name;
-        playerResultSpan.innerText = playerResult;
-      };
-      selectionButton.addEventListener("click", selectButton);
-    });
-  }
-});
-*/
 
 const showWinningRate = (scoreSpan) => {
   const winNum = parseInt(scoreSpan.innerText);

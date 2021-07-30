@@ -1,5 +1,45 @@
 body {
-  background-color: #ccc;
+  background-color: #f9f9f9;
+  font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif
+}
+
+.main-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.start-game, .result, .final-result {
+  width: 80%;
+  margin-top: 15px;
+  margin-bottom: 15px;
+  border: 2px solid lightgray;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.selections {
+  width: 80%;
+  margin-top: 15px;
+  margin-bottom: 15px;
+  padding: 20px;
+  display: flex;
+}
+
+#start-button {
+  font-size: 1rem;
+  padding: 6px;
+}
+
+#game-count {
+  margin-top: 10px;
+}
+
+#time-count {
+  margin-top: 6px;
+  color:red;
 }
 
 .selections {
@@ -13,13 +53,29 @@ body {
   outline: none;
   cursor: pointer;
   transition: 100ms;
-  font-size: 2rem;
+  font-size: 2.5rem;
+  margin-right: 8px;
+  margin-left: 8px;
 }
 
 .selection:hover {
-  transform: scale(1.2);
+  transform: scale(1.5);
 }
 
-.none {
-  display: none;
+.session-results {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.session-result {
+  margin-left: 10px;
+  margin-right: 10px;
+  padding: 10px;
+  height: 40px;
+}
+
+#session-winner, #session-score {
+  margin-top: 10px;
+  padding: 6px;
 }
