@@ -1,132 +1,18 @@
-/*
-const COUNT = 5;
-let player = "";
-//let computer = "";
-let playerWin = 0;
-let computerWin = 0;
-let start = 3;
-const rpsArray = ["rock", "paper", "scissors"];
-
-const resultBoard = document.getElementById("resultBoard");
-const resultPara = document.getElementById("resultPara");
-const startButton = document.getElementById("start-button");
-const showCountdown = document.getElementById("countdown");
-
-const rockButton = document.getElementById("rock-button");
-const paperButton = document.getElementById("paper-button");
-const scissorsButton = document.getElementById("scissors-button");
-
-const playerResult = document.getElementById("player-result");
-const computerResult = document.getElementById("computer-result");
-
-showCountdown.innerHTML = start;
-
-const gameStart = () => {
-  let count = 3;
-  const interval = setInterval(() => {
-    if (count === 0) {
-      clearInterval(interval);
-      return;
-    }
-    count--;
-    showCountdown.innerHTML = count;
-  }, 1000);
-
-  const p = new Promise((resolve) => {
-    const computer = rpsArray[Math.floor(Math.random() * 3)];
-    computerResult.innerHTML += computer;
-    const playerTimeout = setTimeout(() => {
-      setPlayer();
-      resolve([player, computer]);
-    }, 3200);
-  });
-
-  p.then((result) => setGame(result)).then((result) => displayResult(result));
-};
-
-console.log(playerWin);
-console.log(computerWin);
-
-const chooseRock = () => {
-  player = "rock";
-};
-
-const choosePaper = () => {
-  player = "paper";
-};
-
-const chooseScissors = () => {
-  player = "scissors";
-};
-
-const setComputer = () => {
-  computer = rpsArray[Math.floor(Math.random() * 3)];
-  computerResult.innerHTML += computer;
-};
-
-const setPlayer = () => {
-  if (player === "") {
-    alert("you have to choose!");
-  }
-  playerResult.innerHTML += player;
-};
-
-const setGame = ([player, computer]) => {
-  switch (player) {
-    case "rock":
-      switch (computer) {
-        case "rock":
-          break;
-        case "scissors":
-          playerWin++;
-          break;
-        case "paper":
-          computerWin++;
-          break;
-      }
-    case "paper":
-      switch (computer) {
-        case "rock":
-          playerWin++;
-          break;
-        case "scissors":
-          computerWin++;
-          break;
-        case "paper":
-          break;
-      }
-    case "scissors":
-      switch (computer) {
-        case "rock":
-          computerWin++;
-          break;
-        case "scissors":
-          break;
-        case "paper":
-          playerWin++;
-          break;
-      }
-  }
-  return [playerWin, computerWin];
-};
-
-const displayResult = ([playerWin, computerWin]) => {
-  const winner = playerWin > computerWin ? "player" : "computer";
-  resultPara.innerHTML = `you won ${playerWin} times and computer won ${computerWin} times, so ${winner} won the game!`;
-};
-*/
-
 const startButton = document.getElementById("start-button");
 const selectionButtons = document.querySelectorAll("[data-selection]");
 const startgameSection = document.querySelector(".start-game");
-//const computerScoreSpan = document.querySelector("[data-computer-score");
-//const yourScoreSpan = document.querySelector("[data-your-score]");
 const gameCountSpan = document.querySelector(".game-count");
 const timeCountSpan = document.querySelector(".time-count");
 const playerResultSpan = document.querySelector(".player-result");
 const computerResultSpan = document.querySelector(".computer-result");
 const sessionWinnerSpan = document.querySelector(".session-winner");
 const scoreSpan = document.querySelector(".session-score");
+const finalWinnerSpan = document.querySelector(".final-winner");
+const winningRateSpan = document.querySelector(".winning-rate");
+const finalResultSection = document.querySelector(".final-result");
+const newGameButton = document.getElementById("new-game");
+
+const GAME_COUNT = 3;
 
 let gameCount = 0;
 let playerScore = 0;
@@ -173,15 +59,25 @@ const makeSessionResult = () => {
     (selection) => selection.name === playerResult
   );
   if (computerResult === selected.beats) {
-    sessionWinnerSpan.innerText = "You won";
+    sessionWinner = "You won";
     playerScore++;
   } else if (computerResult === selected.loses) {
-    sessionWinnerSpan.innerText = "Computer won";
+    sessionWinner = "Computer won";
     computerScore++;
   } else {
-    sessionWinnerSpan.innerText = "Draw";
+    sessionWinner = "Draw";
   }
+  sessionWinnerSpan.innerText = sessionWinner;
   scoreSpan.innerText = `player: ${playerScore}, computer: ${computerScore}`;
+};
+
+const startNewSession = () => {
+  playerResult = "";
+  computerResult = "";
+  playerResultSpan.innerText = playerResult;
+  computerResultSpan.innerText = computerResult;
+  sessionWinnerSpan.innerText = "";
+  startGame();
 };
 
 selectionButtons.forEach((selectionButton) => {
@@ -197,31 +93,71 @@ selectionButtons.forEach((selectionButton) => {
 });
 
 const startGame = () => {
+  startButton.removeEventListener("click", startGame);
+  if (gameCount === GAME_COUNT) {
+    makeFinalResult();
+    return;
+  }
   gameCount++;
   gameCountSpan.innerText = gameCount;
 
-  timeCountdown().then(() => setTimeout(makeSessionResult, 200));
+  timeCountdown()
+    .then(() => setTimeout(makeSessionResult, 200))
+    .then(() => setTimeout(startNewSession, 2000));
 };
 
-selectionButtons.forEach((selectionButton) => {
-  const selectButton = () => {
-    const selectedName = selectionButton.dataset.selection;
-    const selected = SELECTIONS.find(
-      (selection) => selection.name === selectedName
-    );
-    playerResult = selected.name;
-    playerResultSpan.innerText = playerResult;
-  };
-  selectionButton.addEventListener("click", selectButton);
+startButton.addEventListener("click", startGame);
+
+const startNewGame = () => {
+  gameCount = 0;
+  playerScore = 0;
+  computerScore = 0;
+  gameCountSpan.innerText = gameCount;
+  scoreSpan.innerText = "";
+  finalWinnerSpan.innerText = "";
+  winningRateSpan.innerText = "";
+  startButton.addEventListener("click", startGame);
+  newGameButton.removeEventListener("click", startNewGame);
+};
+
+const makeFinalResult = () => {
+  let winningRate = 0;
+  if (playerScore > computerScore) {
+    finalWinner = "You";
+    winningRate = playerScore / GAME_COUNT;
+  } else if (playerScore < computerScore) {
+    finalWinner = "Computer";
+    winningRate = computerScore / GAME_COUNT;
+  } else {
+    finalWinner = "No one";
+    winningRate = 0;
+  }
+  finalWinnerSpan.innerText = finalWinner;
+  winningRateSpan.innerText = winningRate;
+  newGameButton.addEventListener("click", startNewGame);
+};
+
+/*
+body.addEventListener("click", (event) => {
+  if (event.target === startButton) {
+    startGame();
+  } else if (event.target === newGameButton) {
+    startNewGame();
+  } else if (event.target === selectionButtons) {
+    selectionButtons.forEach((selectionButton) => {
+      const selectButton = () => {
+        const selectedName = selectionButton.dataset.selection;
+        const selected = SELECTIONS.find(
+          (selection) => selection.name === selectedName
+        );
+        playerResult = selected.name;
+        playerResultSpan.innerText = playerResult;
+      };
+      selectionButton.addEventListener("click", selectButton);
+    });
+  }
 });
-
-const isWinner = (selection, opponent) => {
-  return selection.beats === opponent.name;
-};
-
-const increaseScore = (scoreSpan) => {
-  scoreSpan.innerText = parseInt(scoreSpan.innerText) + 1;
-};
+*/
 
 const showWinningRate = (scoreSpan) => {
   const winNum = parseInt(scoreSpan.innerText);
@@ -230,38 +166,6 @@ const showWinningRate = (scoreSpan) => {
   div.innerHTML = `you won ${winNum} times. Winning rate is ${winRate}`;
   addResetButton(div);
   startgameSection.appendChild(div);
-};
-
-const resetGame = () => {
-  gameCount = 0;
-  yourScoreSpan.innerText = 0;
-  computerScoreSpan.innerText = 0;
-};
-
-const addResetButton = (div) => {
-  const button = document.createElement("button");
-  button.innerText = "Another Game";
-  button.addEventListener("click", resetGame);
-  div.appendChild(button);
-};
-
-const makeSelection = (selected) => {
-  const computerSelection = randomSelection();
-  const youWinner = isWinner(selected, computerSelection);
-  const comWinner = isWinner(computerSelection, selected);
-  console.log([youWinner, comWinner]);
-  if (youWinner) {
-    increaseScore(yourScoreSpan);
-  }
-  if (comWinner) {
-    increaseScore(computerScoreSpan);
-  }
-  addSelectionResult(computerSelection, comWinner);
-  addSelectionResult(selected, youWinner);
-  gameCount++;
-  if (gameCount === 3) {
-    showWinningRate(yourScoreSpan);
-  }
 };
 
 const randomSelection = () => {

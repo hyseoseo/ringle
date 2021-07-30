@@ -9,7 +9,7 @@
 <body>
   <h1>Rock Paper Scissors</h1>
   <section class="start-game">
-    <button id="start-button" onclick="startGame()">Start</button>
+    <button id="start-button">Start Game</button>
     <div>Game<span class="game-count"></span></div>
     <div>Countdown: <span class="time-count"></span></div>
   </section>
@@ -29,14 +29,10 @@
   </section>
 
   <section class="final-result">
-    <div class="final-winner">Final Winner is </div>
-    <div class="winning-rate">Final Winning Rate: </div>
+    <div>Final Winner is <span class="final-winner"></span></div>
+    <div>Final Winning Rate: <span class="winning-rate"></span></div>
+    <button id="new-game">Start New Game</button>
   </section>
-<!--
-  <form>
-    <button id="resetButton" type="submit">Play Again?</button>
-  </form>
--->
   
   <script src="./rockPaperScissors.js"></script>
 </body>
